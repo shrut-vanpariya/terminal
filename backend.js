@@ -1,8 +1,27 @@
+const express = require('express');
 const WebSocket = require('ws')
 var os = require('os');
 var pty = require('node-pty');
+const path = require('path');
 
-const wss = new WebSocket.Server({ port: 6060 })
+
+
+const app = express()
+const port = process.env.PORT || 8080;
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  });
+  
+
+const server = app.listen(port, () => {
+    console.log(`Server is running at...${port}`);
+})
+
+const wss = new WebSocket.Server({server})
 
 console.log("Socket is up and running...")
 
